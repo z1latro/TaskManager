@@ -32,8 +32,11 @@ class taskManager:
             print("Task number not found")
 
     def view(self):
-        for index,task in enumerate(self.task_list):
-            print(f"{index+1}. {task}")
+        if not self.task_list:
+            print("Task list is empty add a task first.")
+        else:
+            for index,task in enumerate(self.task_list):
+                print(f"{index+1}. {task}")
 
     def edit(self):
         self.view()
