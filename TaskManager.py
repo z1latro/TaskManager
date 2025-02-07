@@ -23,6 +23,9 @@ class taskManager:
         print("\nTask Sucessfully added")
 
     def delete(self):
+        if not self.task_list:
+            print("Task list is empty. Add a task first.")
+            return
         try:
             self.view()
             task_deletion = int(input("Enter task number to delete"))
@@ -39,36 +42,36 @@ class taskManager:
                 print(f"{index+1}. {task}")
 
     def edit(self):
-        self.view()
+        if not self.task_list:
+            print("Task list is empty. Add a task first.")
+            return
+
         try:
+            self.view() 
             task_edit = int(input("Enter task number to edit:"))
-            task_to_edit = self.task_list[task_edit -1]
-            print("1.Flip Status")
-            print("2.Edit task")
-            choice = input("Please enter choice:")
+            task_to_edit = self.task_list[task_edit - 1]
+            print("1. Flip Status")
+            print("2. Edit task")
+            choice = input("Please enter choice: ")
+
             if choice == '1':
-                name = task_to_edit.name 
-                priority = task_to_edit.priority
-                if task_to_edit.status == False:
-                    task_status = True
-                    task = Task(name,priority,task_status)
-                    self.task_list[task_edit-1] = task
-                    print("Task Edited Sucessfully")
-                elif task_to_edit.status == True:
-                    task_status = False
-                    task = Task(name,priority,task_status)
-                    self.task_list[task_edit-1] = task
-                    print("Task Edited Sucessfully")
+                task_to_edit.status = not task_to_edit.status
+                print("Task status updated successfully")
             elif choice == '2':
-                task_name = input("Enter new task name")
-                task_priority = input("Enter new priority [High,Medium,Low]")
-                task_status = task_to_edit.status
-                task = Task(task_name,task_priority,task_status)
-                self.task_list[task_edit-1] = task
-                print("Task Edited Sucessfully")
+                task_name = input("Enter new task name: ")
+                task_priority_options = {'High','Medium','Low'}
+                while True:
+                    task_priority = input("Enter priority [High,Medium,Low]").strip().capitalize()
+                    if task_priority in task_priority_options:
+                        break
+                print("Invalid priority! Please enter 'High', 'Medium', or 'Low'.")
+                task_to_edit.name = task_name
+                task_to_edit.priority = task_priority
+                print("Task updated successfully")
+            else:
+                print("Invalid Choice. Please try again.")
         except IndexError:
             print("Task number not in list")
-
     def main(self):
         while True:
             print("")
@@ -92,8 +95,6 @@ class taskManager:
                 self.edit()
             else:
                 print("\nInvalid Choice Please Try again")
-
-        
 if __name__ == '__main__':
     task_manager = taskManager()
     task_manager.main()
